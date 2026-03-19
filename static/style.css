@@ -1,0 +1,39 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background: linear-gradient(to right, #a8e063, #56ab2f);
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    margin: 50px auto;
+    width: 350px;
+    border-radius: 10px;
+}
+
+button {
+    background: green;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin-top: 10px;
+}
+
+img {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-group button {
+    margin: 5px;
+    padding: 10px 15px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-group button:hover {
+    background: #1b5e20;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AgriVision</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>🌿 AgriVision</h1>
+
+        <form action="/predict" method="post" enctype="multipart/form-data">
+
+            <input type="file" id="fileInput" name="file" accept="image/*" hidden onchange="previewImage(event)">
+
+            <button type="button" onclick="openCamera()">📷 Camera</button>
+            <button type="button" onclick="openGallery()">🖼 Upload</button>
+
+            <br><br>
+
+            <video id="video" width="250" autoplay style="display:none;"></video>
+            <br>
+            <button type="button" id="captureBtn" onclick="captureImage()" style="display:none;">Capture</button>
+
+            <canvas id="canvas" style="display:none;"></canvas>
+
+            <img id="preview" class="preview-img" />
+
+            <br>
+
+            <button type="submit">Analyze</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <h2>{{ prediction }}</h2>
+            <p>Confidence: {{ confidence }}%</p>
+            <p>Solution: {{ solution }}</p>
+            <img src="{{ image_path }}" class="result-img">
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function openCamera() {
+            const video = document.getElementById('video');
+            const captureBtn = document.getElementById('captureBtn');
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.style.display = 'block';
+                    captureBtn.style.display = 'inline';
+                    video.srcObject = stream;
+                });
+        }
+
+        function openGallery() {
+            document.getElementById("fileInput").click();
+        }
+
+        function previewImage(event) {
+            const preview = document.getElementById("preview");
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = "block";
+        }
+
+        // 🔥 FIXED CAMERA CAPTURE
+
+        function captureImage() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const preview = document.getElementById('preview');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+
+            canvas.toBlob(function (blob) {
+
+                // 🔥 convert blob to file
+                let file = new File([blob], "capture.png", { type: "image/png" });
+
+                // 🔥 put file into input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+
+                const fileInput = document.getElementById("fileInput");
+                fileInput.files = dataTransfer.files;
+
+                // 🔥 show preview
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+            });
+
+            // stop camera
+            let stream = video.srcObject;
+            let tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+
+            video.style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>
