@@ -63,7 +63,7 @@ cd agrivision
 
 ```
 python -m venv train_env
-train_env\Scripts\activate   (Windows)
+train_env\Scripts\activate   
 ```
 
 ---
