@@ -53,7 +53,7 @@ AgriVision/
 ### 1. Clone Repository
 
 ```
-git clone https://github.com/your-username/agrivision.git
+git clone https://github.com/manu-2006/agrivision.git
 cd agrivision
 ```
 
